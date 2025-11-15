@@ -1,4 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Required for context.read
+import 'package:get_it/get_it.dart';
+
+import '../bloc/multistore_integration/multistore_integration_bloc.dart';
+import '../bloc/multistore_integration/multistore_integration_state.dart';
+import '../repositories/auth_repository.dart';
+
+// Admin Views
+import '../views/admin/admin_dashboard_page.dart';
+import '../views/admin/admin_store_list_page.dart';
+import '../views/admin/admin_store_form_page.dart';
+import '../views/admin/admin_stock_list_page.dart';
+import '../views/admin/admin_stock_form_page.dart';
+
+// Merchant Views
+import '../views/merchant/merchant_dashboard_page.dart';
+import '../views/merchant/merchant_order_list_page.dart';
+
 import 'package:trizy_app/views/address/my_addresses_page.dart';
 import 'package:trizy_app/views/checkout/checkout_page.dart';
 import 'package:trizy_app/views/main/main_page.dart';
@@ -37,6 +56,42 @@ class AppRouter {
   AppRouter()
       : router = GoRouter(
     initialLocation: '/mainPage',
+    redirect: (context, state) {
+      // Access the global multistore state
+      final multistoreState = context.read<MultistoreIntegrationBloc>().state;
+      final isAuthenticated = multistoreState.isAuthenticated;
+      final isAdmin = multistoreState.isAdmin;
+
+      final location = state.fullPath;
+      final isLoggingIn = location == '/login';
+      final isSigningUp = location == '/signup';
+
+      // If not authenticated, redirect to login, unless trying to login/signup
+      if (!isAuthenticated && !isLoggingIn && !isSigningUp) {
+        if (location != '/' && location != '/onboarding') {
+          return '/login';
+        }
+      }
+
+      // If authenticated, but trying to access login/signup, redirect to home
+      if (isAuthenticated && (isLoggingIn || isSigningUp)) {
+        return '/mainPage';
+      }
+
+      // Admin-specific redirection
+      if (location?.startsWith('/admin') == true && !isAdmin) {
+        // If trying to access admin routes without admin role, redirect to main page
+        return '/mainPage';
+      }
+
+      // Merchant-specific redirection (simplified: assumes admin role for merchant view)
+      if (location?.startsWith('/merchant') == true && !isAdmin) {
+        // If trying to access merchant routes without admin role, redirect to main page
+        return '/mainPage';
+      }
+
+      return null; // No redirection needed
+    },
     routes: [
       GoRoute(
         name: 'splash',
@@ -62,6 +117,46 @@ class AppRouter {
         name: 'mainPage',
         path: '/mainPage',
         builder: (context, state) => const MainPage(),
+      ),
+      // Admin Routes
+      GoRoute(
+        name: 'adminDashboard',
+        path: '/admin',
+        builder: (context, state) => const AdminDashboardPage(),
+      ),
+      GoRoute(
+        name: 'adminStores',
+        path: '/admin/stores',
+        builder: (context, state) => const AdminStoreListPage(),
+      ),
+      GoRoute(
+        name: 'adminAddStore',
+        path: '/admin/stores/add',
+        builder: (context, state) => const AdminStoreFormPage(),
+      ),
+      GoRoute(
+        name: 'adminStock',
+        path: '/admin/stock',
+        builder: (context, state) => const AdminStockListPage(),
+      ),
+      GoRoute(
+        name: 'adminAddStock',
+        path: '/admin/stock/add',
+        builder: (context, state) => const AdminStockFormPage(),
+      ),
+      // Merchant Routes
+      GoRoute(
+        name: 'merchantDashboard',
+        path: '/merchant',
+        builder: (context, state) => const MerchantDashboardPage(),
+      ),
+      GoRoute(
+        name: 'merchantOrders',
+        path: '/merchant/orders/:storeId',
+        builder: (context, state) {
+          final storeId = state.pathParameters['storeId']!;
+          return MerchantOrderListPage(storeId: storeId);
+        },
       ),
       GoRoute(
         name: 'search',

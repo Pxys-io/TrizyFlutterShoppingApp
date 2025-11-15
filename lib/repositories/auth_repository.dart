@@ -15,8 +15,23 @@ import '../services/auth_api_service.dart';
 class AuthRepository {
   final AuthApiService apiService;
   final LocalProductService localProductService = getIt<LocalProductService>();
+  
+  User? _currentUser;
+  String? _currentStoreId;
 
   AuthRepository(this.apiService);
+
+  // Getters for current state
+  User? get currentUser => _currentUser;
+  String? get currentStoreId => _currentStoreId;
+  
+  bool isAuthenticated() {
+    return _currentUser != null;
+  }
+  
+  bool isAdmin() {
+    return _currentUser?.isAdmin == true;
+  }
 
   Future<User> signUp(SignUpRequest request) async {
     try {
@@ -27,6 +42,7 @@ class AuthRepository {
         email: response.email,
         firstName: response.userFirstName,
         lastName: response.userLastName,
+        isAdmin: response.isAdmin ?? false, // Add isAdmin property
         emailVerified: response.emailVerified,
       );
 
@@ -37,8 +53,11 @@ class AuthRepository {
         email: response.email,
         firstName: response.userFirstName,
         lastName: response.userLastName,
+        isSubscriber: response.isSubscriber,
+        isAdmin: response.isAdmin ?? false, // Store isAdmin in local preferences too
       ));
 
+      _currentUser = user; // Update in-memory user
       return user;
     } catch (e) {
       throw Exception('Failed to sign up: $e');
@@ -54,7 +73,9 @@ class AuthRepository {
         email: response.email,
         firstName: response.userFirstName,
         lastName: response.userLastName,
+        isAdmin: response.isAdmin ?? false, // Add isAdmin property
         emailVerified: response.emailVerified,
+        isSubscriber: response.isSubscriber,
       );
 
       await _saveTokens(response.accessToken, response.refreshToken);
@@ -64,7 +85,8 @@ class AuthRepository {
         email: response.email,
         firstName: response.userFirstName,
         lastName: response.userLastName,
-        isSubscriber: response.isSubscriber
+        isSubscriber: response.isSubscriber,
+        isAdmin: response.isAdmin ?? false, // Store isAdmin in local preferences too
       ));
 
       final List<String> severLikedProductIds = response.likedProductIds;
@@ -92,12 +114,33 @@ class AuthRepository {
         await localProductService.clearCart();
       }
 
+      _currentUser = user; // Update in-memory user
       return user;
     } catch (e) {
       throw Exception('Failed to sign in: $e');
     }
   }
 
+  // Initialize the repository by loading user data from local storage
+  Future<void> init() async {
+    final userPrefs = await getUser();
+    if (userPrefs != null) {
+      _currentUser = User(
+        id: userPrefs.id,
+        email: userPrefs.email,
+        firstName: userPrefs.firstName,
+        lastName: userPrefs.lastName,
+        isAdmin: userPrefs.isAdmin ?? false,
+        emailVerified: userPrefs.emailVerified ?? false,
+        isSubscriber: userPrefs.isSubscriber ?? false,
+        hasActiveTrial: userPrefs.hasActiveTrial ?? false,
+      );
+    }
+    
+    // Load current store ID if any
+    final prefs = await SharedPreferences.getInstance();
+    _currentStoreId = prefs.getString('currentStoreId');
+  }
 
   Future<void> _saveTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
@@ -134,5 +177,22 @@ class AuthRepository {
     await prefs.remove('user');
     await prefs.remove('accessToken');
     await prefs.remove('refreshToken');
+    await prefs.remove('currentStoreId'); // Also clear store ID
+    
+    _currentUser = null; // Clear in-memory user
+    _currentStoreId = null; // Clear current store ID
+  }
+  
+  // Methods for managing current store ID
+  Future<void> setCurrentStoreId(String storeId) async {
+    _currentStoreId = storeId;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('currentStoreId', storeId);
+  }
+
+  Future<void> clearCurrentStoreId() async {
+    _currentStoreId = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('currentStoreId');
   }
 }

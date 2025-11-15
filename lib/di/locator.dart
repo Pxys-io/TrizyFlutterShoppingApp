@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:trizy_app/repositories/address_repository.dart';
 import 'package:trizy_app/repositories/ai_suggestions_repository.dart';
@@ -36,14 +37,24 @@ import '../services/local/local_product_service.dart';
 import '../utils/api_endpoints.dart';
 import '../utils/networking_manager.dart';
 
+// New services and repositories for admin/merchant features
+import '../repositories/stores_repository.dart';
+import '../repositories/stock_repository.dart';
+import '../services/stores_api_service.dart';
+import '../services/stock_api_service.dart';
+
+// BLoCs
+import '../bloc/multistore_integration/multistore_integration_bloc.dart';
+import '../bloc/admin/store_management/admin_store_bloc.dart';
+import '../bloc/admin/stock_management/admin_stock_bloc.dart';
+import '../bloc/merchant/order_management/merchant_order_bloc.dart';
+
 final getIt = GetIt.instance;
 
-void setupLocator() {
-
+Future<void> setupLocator() async {
   getIt.registerLazySingleton<AppDatabase>(() => AppDatabase());
   getIt.registerLazySingleton<LocalProductRepository>(() => LocalProductRepository(getIt<AppDatabase>()));
   getIt.registerLazySingleton<LocalProductService>(() => LocalProductService(getIt<LocalProductRepository>()));
-
 
   getIt.registerLazySingleton<NetworkingManager>(() => NetworkingManager(
     baseUrl: kIsWeb
@@ -80,5 +91,18 @@ void setupLocator() {
   getIt.registerLazySingleton<UserProfileApiService>(() => UserProfileApiService());
   getIt.registerLazySingleton<UserProfileRepository>(() => UserProfileRepository(getIt<UserProfileApiService>()));
 
+  // New admin/merchant services and repositories
+  getIt.registerLazySingleton<StoresApiService>(() => StoresApiService());
+  getIt.registerLazySingleton<StockApiService>(() => StockApiService());
+  getIt.registerLazySingleton<StoresRepository>(() => StoresRepository());
+  getIt.registerLazySingleton<StockRepository>(() => StockRepository());
 
+  // Initialize AuthRepository with data loading
+  await getIt<AuthRepository>().init();
+
+  // BLoC factories (register as factories since they are scoped to widget lifecycle)
+  getIt.registerFactory<MultistoreIntegrationBloc>(() => MultistoreIntegrationBloc());
+  getIt.registerFactory<AdminStoreBloc>(() => AdminStoreBloc());
+  getIt.registerFactory<AdminStockBloc>(() => AdminStockBloc());
+  getIt.registerFactory<MerchantOrderBloc>(() => MerchantOrderBloc());
 }

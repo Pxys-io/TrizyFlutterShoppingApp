@@ -4,6 +4,7 @@ import 'package:trizy_app/models/order/order_details_response.dart';
 import 'package:trizy_app/services/orders_api_service.dart';
 
 import '../di/locator.dart';
+import '../models/order/store_order.dart';
 import '../services/local/local_product_service.dart';
 
 class OrdersRepository {
@@ -54,6 +55,59 @@ class OrdersRepository {
     }
   }
 
+  // Store Order Methods
+  Future<StoreOrder> createOrder({
+    required String storeId,
+    required String productId,
+    required int quantity,
+    required double price,
+    required String addressId,
+  }) async {
+    try {
+      return await ordersApiService.createOrder(
+        storeId: storeId,
+        productId: productId,
+        quantity: quantity,
+        price: price,
+        addressId: addressId,
+      );
+    } catch (e) {
+      throw Exception('Failed to create order: $e');
+    }
+  }
 
+  Future<StoreOrder> approveStoreOrder({
+    required String storeOrderId,
+  }) async {
+    try {
+      return await ordersApiService.approveStoreOrder(
+        storeOrderId: storeOrderId,
+      );
+    } catch (e) {
+      throw Exception('Failed to approve store order: $e');
+    }
+  }
+
+  Future<StoreOrder> updateOrderStatus({
+    required String storeOrderId,
+    required String state,
+  }) async {
+    try {
+      return await ordersApiService.updateOrderStatus(
+        storeOrderId: storeOrderId,
+        state: state,
+      );
+    } catch (e) {
+      throw Exception('Failed to update order status: $e');
+    }
+  }
+
+  Future<List<StoreOrder>> getStoreOrders({String? storeId}) async {
+    try {
+      return await ordersApiService.getStoreOrders(storeId: storeId);
+    } catch (e) {
+      throw Exception('Failed to get store orders: $e');
+    }
+  }
 
 }
