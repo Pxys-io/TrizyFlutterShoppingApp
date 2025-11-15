@@ -179,7 +179,7 @@ class _AddressFormPageState extends State<AddressFormPage> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: addressType,
+                      initialValue: addressType,
                       dropdownColor: white,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(

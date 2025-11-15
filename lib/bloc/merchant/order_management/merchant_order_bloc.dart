@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'merchant_order_event.dart';
 import 'merchant_order_state.dart';
 import '../../../repositories/orders_repository.dart';
-import '../../../models/order/store_order.dart';
 
 /// BLoC for managing merchant order operations for a specific store.
 class MerchantOrderBloc extends Bloc<MerchantOrderEvent, MerchantOrderState> {
@@ -29,7 +28,7 @@ class MerchantOrderBloc extends Bloc<MerchantOrderEvent, MerchantOrderState> {
   Future<void> _onUpdateMerchantOrderStatus(UpdateMerchantOrderStatus event, Emitter<MerchantOrderState> emit) async {
     emit(state.copyWith(status: MerchantOrderStatus.loading));
     try {
-      final updatedOrder = await _ordersRepository.updateOrderStatus(
+      await _ordersRepository.updateOrderStatus(
         storeOrderId: event.storeOrderId,
         state: event.status,
       );

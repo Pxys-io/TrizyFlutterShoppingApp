@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import '../models/stock/stock_model.dart';
-import '../utils/api_endpoints.dart';
 import '../utils/networking_manager.dart';
 
 class StockApiService {
@@ -23,7 +22,7 @@ class StockApiService {
       final response = await _networkingManager.post(
         endpoint: 'api/stock', // This endpoint requires auth according to API docs
         body: body,
-        authenticated: true,
+        addAuthToken: true,
       );
       return Stock.fromJson(response);
     } catch (e) {

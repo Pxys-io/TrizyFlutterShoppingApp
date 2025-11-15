@@ -29,7 +29,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
     if (widget.orderId != null) {
       _orderDetailsBloc.add(OrderDetailsRequested(orderId: widget.orderId!));
     } else {
-      _orderDetailsBloc.add(LatestOrderDetailsRequested());
+      _orderDetailsBloc.add(const LatestOrderDetailsRequested());
     }
   }
 
@@ -170,7 +170,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 pathParameters: {"productId": item.productId});
                           },
                         );
-                      }).toList(),
+                      }),
 
                       const SizedBox(height: 24),
 

@@ -9,7 +9,12 @@ abstract class AdminStoreEvent extends Equatable {
 }
 
 /// Event to load all stores for admin management.
-class LoadAdminStores extends AdminStoreEvent {}
+class LoadAdminStores extends AdminStoreEvent {
+  const LoadAdminStores();
+
+  @override
+  List<Object?> get props => [];
+}
 
 /// Event to add a new store.
 class AddAdminStore extends AdminStoreEvent {

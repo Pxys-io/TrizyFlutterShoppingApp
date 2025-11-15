@@ -12,7 +12,7 @@ class BottomBarWithCartButton extends StatelessWidget {
   final String buttonText;
 
   const BottomBarWithCartButton({
-    Key? key,
+    super.key,
     required this.price,
     this.salePrice,
     required this.cargoWeight,
@@ -20,7 +20,7 @@ class BottomBarWithCartButton extends StatelessWidget {
     this.isAddToCartActive = true,
     this.isLoading = false,
     this.buttonText = "Add to Cart",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

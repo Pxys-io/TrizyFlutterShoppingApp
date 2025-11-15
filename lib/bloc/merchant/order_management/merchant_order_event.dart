@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../../models/order/store_order.dart';
 
 /// Base class for all events related to merchant order management.
 abstract class MerchantOrderEvent extends Equatable {

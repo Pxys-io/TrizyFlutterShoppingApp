@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trizy_app/bloc/multistore_integration/multistore_integration_bloc.dart';
+import 'package.dart';
+import 'package:trizy_app/bloc/multistore_integration/multistore_integration_event.dart';
 
 import '../../bloc/auth/sign_up/signup_bloc.dart';
 import '../../bloc/auth/sign_up/signup_event.dart';
@@ -134,6 +137,9 @@ class _SignupPageState extends State<SignupPage> {
                       BlocConsumer<SignupBloc, SignupState>(
                         listener: (context, state) {
                           if (state.isSuccess) {
+                            context
+                                .read<MultistoreIntegrationBloc>()
+                                .add(RefreshAuthStatus());
                             context.goNamed('mainPage');
                           } else if (state.isFailure) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -149,13 +155,13 @@ class _SignupPageState extends State<SignupPage> {
                             color: primaryLightColor,
                             onClick: () {
                               context.read<SignupBloc>().add(
-                                SignupSubmitted(
-                                  email: emailController.text,
-                                  firstName: firstNameController.text,
-                                  lastName: lastNameController.text,
-                                  password: passwordController.text,
-                                ),
-                              );
+                                    SignupSubmitted(
+                                      email: emailController.text,
+                                      firstName: firstNameController.text,
+                                      lastName: lastNameController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  );
                             },
                           );
                         },
@@ -179,11 +185,13 @@ class _SignupPageState extends State<SignupPage> {
                             children: [
                               TextSpan(
                                 text: "Already have an account? ",
-                                style: AppTextStyles.bodyText.copyWith(color: gray),
+                                style:
+                                    AppTextStyles.bodyText.copyWith(color: gray),
                               ),
                               TextSpan(
                                 text: "Login",
-                                style: AppTextStyles.bodyText.copyWith(color: primaryLightColor),
+                                style: AppTextStyles.bodyText
+                                    .copyWith(color: primaryLightColor),
                               ),
                             ],
                           ),
@@ -193,6 +201,9 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(height: 20.0),
                     InkWell(
                       onTap: () {
+                        context
+                            .read<MultistoreIntegrationBloc>()
+                            .add(RefreshAuthStatus());
                         context.goNamed("mainPage");
                       },
                       child: Text(

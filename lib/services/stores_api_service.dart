@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import '../models/store/store_model.dart';
-import '../utils/api_endpoints.dart';
 import '../utils/networking_manager.dart';
 
 class StoresApiService {
@@ -29,7 +28,7 @@ class StoresApiService {
       final response = await _networkingManager.post(
         endpoint: 'api/stores', // This endpoint requires admin rights according to API docs
         body: body,
-        authenticated: true,
+        addAuthToken: true,
       );
       return Store.fromJson(response);
     } catch (e) {

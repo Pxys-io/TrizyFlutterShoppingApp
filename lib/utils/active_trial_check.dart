@@ -27,7 +27,7 @@ Future<bool> checkHasActiveTrial() async {
   if (userJson != null) {
     Map<String, dynamic> userMap = jsonDecode(userJson);
     UserPreferencesModel user = UserPreferencesModel.fromJson(userMap);
-    return user.hasActiveTrial;
+    return user.hasActiveTrial ?? false;
   }
   return false;
 }

@@ -8,7 +8,7 @@ Future<bool> isSubscribed() async {
   if (userJson != null) {
     Map<String, dynamic> userMap = jsonDecode(userJson);
     UserPreferencesModel user = UserPreferencesModel.fromJson(userMap);
-    return user.isSubscriber;
+    return user.isSubscriber ?? false;
   }
   return false;
 }

@@ -7,6 +7,7 @@ class SignInResponse {
   final String refreshToken;
   final String accessToken;
   final bool isSubscriber;
+  final bool? isAdmin;
   final List<String> likedProductIds;
   final List<String> cartItemIds;
 
@@ -19,6 +20,7 @@ class SignInResponse {
     required this.refreshToken,
     required this.accessToken,
     required this.isSubscriber,
+    this.isAdmin,
     required this.likedProductIds,
     required this.cartItemIds,
   });
@@ -33,6 +35,7 @@ class SignInResponse {
       refreshToken: json['refreshToken'],
       accessToken: json['accessToken'],
       isSubscriber: json['isSubscriber'] ?? false,
+      isAdmin: json['isAdmin'],
       likedProductIds: List<String>.from(json['likedProductIds'] ?? []),
       cartItemIds: List<String>.from(json['cartItemIds'] ?? []),
     );
@@ -48,6 +51,7 @@ class SignInResponse {
       'refreshToken': refreshToken,
       'accessToken': accessToken,
       'isSubscriber': isSubscriber,
+      'isAdmin': isAdmin,
       'likedProductIds': likedProductIds,
       'cartItemIds': cartItemIds,
     };

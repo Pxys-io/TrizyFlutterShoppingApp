@@ -16,7 +16,7 @@ class CheckoutItemsList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...cart.items.map((item) => _buildCartItem(item)).toList(),
+        ...cart.items.map((item) => _buildCartItem(item)),
         _buildCargoFee(),
         _buildTotalAmount(),
       ],

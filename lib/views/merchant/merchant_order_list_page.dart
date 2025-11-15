@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import '../../bloc/merchant/order_management/merchant_order_bloc.dart';
 import '../../bloc/merchant/order_management/merchant_order_event.dart';
 import '../../bloc/merchant/order_management/merchant_order_state.dart';
-import '../../models/order/store_order.dart';
 
 class MerchantOrderListPage extends StatelessWidget {
   final String storeId;

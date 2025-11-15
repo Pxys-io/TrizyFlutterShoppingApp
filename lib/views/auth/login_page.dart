@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:trizy_app/bloc/multistore_integration/multistore_integration_bloc.dart';
+import 'package:trizy_app/bloc/multistore_integration/multistore_integration_event.dart';
 
 import '../../bloc/auth/sign_in/signin_bloc.dart';
 import '../../bloc/auth/sign_in/signin_event.dart';
@@ -103,6 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                       BlocConsumer<SignInBloc, SignInState>(
                         listener: (context, state) {
                           if (state.isSuccess) {
+                            context
+                                .read<MultistoreIntegrationBloc>()
+                                .add(RefreshAuthStatus());
                             context.goNamed('mainPage');
                           } else if (state.isFailure) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -120,11 +122,11 @@ class _LoginPageState extends State<LoginPage> {
                             color: primaryLightColor,
                             onClick: () {
                               context.read<SignInBloc>().add(
-                                SignInSubmitted(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                ),
-                              );
+                                    SignInSubmitted(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  );
                             },
                           );
                         },
@@ -149,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                               TextSpan(
                                 text: "Don't have an account? ",
                                 style:
-                                AppTextStyles.bodyText.copyWith(color: gray),
+                                    AppTextStyles.bodyText.copyWith(color: gray),
                               ),
                               TextSpan(
                                 text: "Register Now",
@@ -164,6 +166,9 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20.0),
                     InkWell(
                       onTap: () {
+                        context
+                            .read<MultistoreIntegrationBloc>()
+                            .add(RefreshAuthStatus());
                         context.goNamed("mainPage");
                       },
                       child: Text(

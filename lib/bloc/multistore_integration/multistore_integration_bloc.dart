@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'multistore_integration_event.dart';
 import 'multistore_integration_state.dart';
 import '../../repositories/auth_repository.dart';
-import '../../models/user/user_model.dart'; // For User model
 
 /// BLoC for managing global multistore integration state, including authentication and user role.
 class MultistoreIntegrationBloc extends Bloc<MultistoreIntegrationEvent, MultistoreState> {

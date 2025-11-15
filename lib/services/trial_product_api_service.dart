@@ -16,7 +16,7 @@ class TrialProductApiService {
       );
       return TrialProductsResponse.fromJson(response);
     } catch (e) {
-      print("error : ${e}");
+      print("error : $e");
       throw Exception('Failed to fetch trial products: $e');
     }
   }
@@ -31,7 +31,7 @@ class TrialProductApiService {
       );
       return TrialProductsResponse.fromJson(response);
     } catch (e) {
-      print("error : ${e}");
+      print("error : $e");
       throw Exception('Failed to fetch trial products: $e');
     }
   }
@@ -56,7 +56,7 @@ class TrialProductApiService {
       }
       return TrialProductsResponse.fromJson(response);
     } catch (e) {
-      print("error : ${e}");
+      print("error : $e");
       throw Exception('Failed to fetch trial products: $e');
     }
   }
@@ -69,7 +69,7 @@ class TrialProductApiService {
       );
       return SingleTrialProductResponse.fromJson(response);
     } catch (e) {
-      print("error : ${e}");
+      print("error : $e");
       throw Exception('Failed to fetch product: $e');
     }
   }

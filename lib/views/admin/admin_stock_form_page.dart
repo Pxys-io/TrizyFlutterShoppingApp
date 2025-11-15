@@ -21,11 +21,11 @@ class _AdminStockFormPageState extends State<AdminStockFormPage> {
   late TextEditingController _totalQuantityController;
   
   // Pricing tier controllers
-  List<TextEditingController> _tierNameControllers = [];
-  List<TextEditingController> _quantityPerTierControllers = [];
-  List<TextEditingController> _pricePerTierControllers = [];
-  List<TextEditingController> _minimumOrderControllers = [];
-  List<Widget> _pricingTierWidgets = [];
+  final List<TextEditingController> _tierNameControllers = [];
+  final List<TextEditingController> _quantityPerTierControllers = [];
+  final List<TextEditingController> _pricePerTierControllers = [];
+  final List<TextEditingController> _minimumOrderControllers = [];
+  final List<Widget> _pricingTierWidgets = [];
 
   @override
   void initState() {
@@ -45,10 +45,18 @@ class _AdminStockFormPageState extends State<AdminStockFormPage> {
     _totalQuantityController.dispose();
     
     // Dispose all pricing tier controllers
-    for (var controller in _tierNameControllers) controller.dispose();
-    for (var controller in _quantityPerTierControllers) controller.dispose();
-    for (var controller in _pricePerTierControllers) controller.dispose();
-    for (var controller in _minimumOrderControllers) controller.dispose();
+    for (var controller in _tierNameControllers) {
+      controller.dispose();
+    }
+    for (var controller in _quantityPerTierControllers) {
+      controller.dispose();
+    }
+    for (var controller in _pricePerTierControllers) {
+      controller.dispose();
+    }
+    for (var controller in _minimumOrderControllers) {
+      controller.dispose();
+    }
     
     super.dispose();
   }
@@ -113,7 +121,7 @@ class _AdminStockFormPageState extends State<AdminStockFormPage> {
             TextFormField(
               controller: _pricePerTierControllers[index],
               decoration: const InputDecoration(labelText: 'Price Per Tier'),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) return 'Please enter a price';
                 if (double.tryParse(value) == null) return 'Please enter a valid number';

@@ -17,7 +17,7 @@ import 'package:trizy_app/models/user/user_pref_model.dart';
 import 'package:trizy_app/theme/colors.dart';
 
 class SubscriptionView extends StatefulWidget {
-  const SubscriptionView({Key? key}) : super(key: key);
+  const SubscriptionView({super.key});
 
   @override
   State<SubscriptionView> createState() => _SubscriptionViewState();

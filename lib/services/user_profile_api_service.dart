@@ -14,7 +14,7 @@ class UserProfileApiService {
       );
       return UserProfileResponse.fromJson(response);
     } catch (e) {
-      print("error : ${e}");
+      print("error : $e");
       throw Exception('Failed to fetch user profile: $e');
     }
   }

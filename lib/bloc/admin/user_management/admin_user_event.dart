@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../../models/user/user_model.dart';
 
 /// Base class for all events related to admin user management.
 abstract class AdminUserEvent extends Equatable {
