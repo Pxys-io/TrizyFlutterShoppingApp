@@ -21,15 +21,7 @@ class ApiEndpoints {
       return dotenv.env['BASE_BACKEND_URL']!;
     }
 
-    if (kIsWeb) {
-      return 'http://localhost:5001';
-    } else if (Platform.isAndroid) {
-      return 'http://10.0.2.2:5001';
-    } else if (Platform.isIOS) {
-      return 'http://localhost:5001';
-    } else {
-      return '';
-    }
+    return 'https://store-backend-eta.vercel.app';
   }
 
   // AUTH

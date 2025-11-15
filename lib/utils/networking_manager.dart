@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'debug_config.dart';
 
 class UnauthorizedException implements Exception {
   final String message;
@@ -86,16 +87,44 @@ class NetworkingManager {
     final url = _constructUrl(endpoint, urlParams);
     final defaultHeaders = await _buildHeaders(headers, addAuthToken);
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - POST REQUEST');
+      print('URL: $url');
+      print('Method: POST');
+      print('Headers: $defaultHeaders');
+      print('Body: $body');
+      print('URL Params: $urlParams');
+      print('Add Auth Token: $addAuthToken');
+    }
+
     try {
       final response = await http.post(
         url,
         headers: defaultHeaders,
         body: jsonEncode(body),
       );
+      
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - POST RESPONSE');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
+      
       return _processResponse(response);
     } on SocketException {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - POST REQUEST ERROR');
+        print('SocketException: No internet connection');
+        print('---');
+      }
       throw Exception("No internet connection");
     } catch (e) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - POST REQUEST ERROR');
+        print('Error: $e');
+        print('---');
+      }
       throw Exception("Unexpected error: $e");
     }
   }
@@ -110,15 +139,43 @@ class NetworkingManager {
     final url = _constructUrl(endpoint, urlParams, queryParams);
     final defaultHeaders = await _buildHeaders(headers, addAuthToken);
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - GET REQUEST');
+      print('URL: $url');
+      print('Method: GET');
+      print('Headers: $defaultHeaders');
+      print('URL Params: $urlParams');
+      print('Query Params: $queryParams');
+      print('Add Auth Token: $addAuthToken');
+    }
+
     try {
       final response = await http.get(
         url,
         headers: defaultHeaders,
       );
+      
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - GET RESPONSE');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
+      
       return _processResponse(response);
     } on SocketException {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - GET REQUEST ERROR');
+        print('SocketException: No internet connection');
+        print('---');
+      }
       throw Exception("No internet connection");
     } catch (e) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - GET REQUEST ERROR');
+        print('Error: $e');
+        print('---');
+      }
       throw Exception("Unexpected error: $e");
     }
   }
@@ -133,16 +190,44 @@ class NetworkingManager {
     final url = _constructUrl(endpoint, urlParams);
     final defaultHeaders = await _buildHeaders(headers, addAuthToken);
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - PUT REQUEST');
+      print('URL: $url');
+      print('Method: PUT');
+      print('Headers: $defaultHeaders');
+      print('Body: $body');
+      print('URL Params: $urlParams');
+      print('Add Auth Token: $addAuthToken');
+    }
+
     try {
       final response = await http.put(
         url,
         headers: defaultHeaders,
         body: jsonEncode(body),
       );
+      
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PUT RESPONSE');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
+      
       return _processResponse(response);
     } on SocketException {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PUT REQUEST ERROR');
+        print('SocketException: No internet connection');
+        print('---');
+      }
       throw Exception("No internet connection");
     } catch (e) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PUT REQUEST ERROR');
+        print('Error: $e');
+        print('---');
+      }
       throw Exception("Unexpected error: $e");
     }
   }
@@ -157,15 +242,43 @@ class NetworkingManager {
     final url = _constructUrl(endpoint, urlParams, queryParams);
     final defaultHeaders = await _buildHeaders(headers, addAuthToken);
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - DELETE REQUEST');
+      print('URL: $url');
+      print('Method: DELETE');
+      print('Headers: $defaultHeaders');
+      print('URL Params: $urlParams');
+      print('Query Params: $queryParams');
+      print('Add Auth Token: $addAuthToken');
+    }
+
     try {
       final response = await http.delete(
         url,
         headers: defaultHeaders,
       );
+      
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - DELETE RESPONSE');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
+      
       return _processResponse(response);
     } on SocketException {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - DELETE REQUEST ERROR');
+        print('SocketException: No internet connection');
+        print('---');
+      }
       throw Exception("No internet connection");
     } catch (e) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - DELETE REQUEST ERROR');
+        print('Error: $e');
+        print('---');
+      }
       throw Exception("Unexpected error: $e");
     }
   }
@@ -180,16 +293,44 @@ class NetworkingManager {
     final url = _constructUrl(endpoint, urlParams);
     final defaultHeaders = await _buildHeaders(headers, addAuthToken);
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - PATCH REQUEST');
+      print('URL: $url');
+      print('Method: PATCH');
+      print('Headers: $defaultHeaders');
+      print('Body: $body');
+      print('URL Params: $urlParams');
+      print('Add Auth Token: $addAuthToken');
+    }
+
     try {
       final response = await http.patch(
         url,
         headers: defaultHeaders,
         body: jsonEncode(body),
       );
+      
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PATCH RESPONSE');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
+      
       return _processResponse(response);
     } on SocketException {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PATCH REQUEST ERROR');
+        print('SocketException: No internet connection');
+        print('---');
+      }
       throw Exception("No internet connection");
     } catch (e) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - PATCH REQUEST ERROR');
+        print('Error: $e');
+        print('---');
+      }
       throw Exception("Unexpected error: $e");
     }
   }
@@ -217,7 +358,22 @@ class NetworkingManager {
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refreshToken');
 
-    if (refreshToken == null) return false;
+    if (refreshToken == null) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - REFRESH TOKEN');
+        print('No refresh token found');
+        print('---');
+      }
+      return false;
+    }
+
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - REFRESH TOKEN REQUEST');
+      print('URL: $baseUrl/refreshAccessToken');
+      print('Method: POST');
+      print('Headers: {Content-Type: application/json}');
+      print('Body: {refreshToken: $refreshToken}');
+    }
 
     final refreshUrl = Uri.parse('$baseUrl/refreshAccessToken');
     final response = await http.post(
@@ -226,6 +382,13 @@ class NetworkingManager {
       body: jsonEncode({'refreshToken': refreshToken}),
     );
 
+    if (DebugConfig.apiDebuggingEnabled) {
+      print('API DEBUG - REFRESH TOKEN RESPONSE');
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      print('---');
+    }
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final newAccessToken = data['accessToken'];
@@ -233,6 +396,13 @@ class NetworkingManager {
 
       await prefs.setString('accessToken', newAccessToken);
       await prefs.setString('refreshToken', newRefreshToken);
+
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - TOKENS UPDATED');
+        print('New Access Token: ${newAccessToken != null ? "<HIDDEN>" : "null"}');
+        print('New Refresh Token: ${newRefreshToken != null ? "<HIDDEN>" : "null"}');
+        print('---');
+      }
 
       return true;
     } else {
@@ -281,10 +451,29 @@ class NetworkingManager {
 
   Map<String, dynamic> _processResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return jsonDecode(response.body);
+      final responseBody = jsonDecode(response.body);
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - RESPONSE SUCCESS');
+        print('Status Code: ${response.statusCode}');
+        print('Decoded Response: $responseBody');
+        print('---');
+      }
+      return responseBody;
     } else if (response.statusCode == 401) {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - RESPONSE ERROR 401');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
       throw UnauthorizedException('401 Unauthorized');
     } else {
+      if (DebugConfig.apiDebuggingEnabled) {
+        print('API DEBUG - RESPONSE ERROR');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        print('---');
+      }
       throw Exception('Error: ${response.statusCode}, ${response.body}');
     }
   }
