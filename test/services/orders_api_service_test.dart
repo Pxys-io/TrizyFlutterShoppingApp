@@ -92,12 +92,6 @@ void main() {
         {'id': '4', 'storeId': 's3', 'productId': 'p4', 'quantity': 1, 'price': 25.0, 'state': 'delivered'},
       ];
 
-      when(mockNetworkingManager.get(
-        endpoint: anyNamed('endpoint'),
-        queryParams: anyNamed('queryParams'),
-        urlParams: anyNamed('urlParams'),
-        addAuthToken: anyNamed('addAuthToken'),
-      )).thenAnswer((_) async => mockResponse);
 
       // Act
       final result = await ordersApiService.getStoreOrders(storeId: 's3');
